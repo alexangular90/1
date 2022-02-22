@@ -1,0 +1,83 @@
+<html ng-app="resource-demo">
+<head>
+  <title>09.01-rails-resource</title>
+
+  <script src="../lib/angular.js" ></script>
+  <script src="../lib/angular-animate.js" ></script>
+  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css">
+
+  <!-- See https://github.com/FineLinePrototyping/angularjs-rails-resource -->
+  <script src="angularjs-rails-resource.min.js" ></script>
+
+  <script>
+  app = angular.module("resource-demo", ['rails', 'ngAnimate']);
+  app.factory('Post', ['railsResourceFactory', function (railsResourceFactory) {
+      return railsResourceFactory({
+        url: 'http://localhost:3000/posts',
+        name: 'post',
+        pluralName: 'posts'
+      });
+  }]);
+
+  app.controller('BlogController', ['$scope', 'Post', function($scope, Post) {
+    $scope.posts = []
+    Post.query().then(function(result){
+        $scope.posts = result
+      })
+
+    $scope.deletePost = function(post) {
+      post.remove().then(function(result){
+        var index = $scope.posts.indexOf(result)
+        if (index>-1) $scope.posts.splice(index,1)
+      })
+    };
+
+    $scope.addPost = function() {
+      var newPost = new Post({title:$scope.post_title, body:$scope.post_body, published:$scope.post_published});
+      $scope.post_title = "";
+      $scope.post_body = "";
+      $scope.post_published = false;
+      newPost.create().then(function(result){
+        $scope.posts.push(result)
+      })
+    };
+  }]);
+  </script>
+
+</head>
+<body>
+  <div ng-controller="BlogController" style="width:400px; margin-left:auto; margin-right:auto;">
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Body</th>
+        <th>Published</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="post in posts">
+        <td>{{post.id}}</td>
+        <td>{{post.title}}</td>
+        <td>{{post.body}}</td>
+        <td>{{post.published}}</td>
+        <td><a href ng-click='deletePost(post)'>Remove</a></td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td><input size="20" type="text" ng-model="post_title"></td>
+        <td><textarea ng-model="post_body"></textarea></td>
+        <td><input type="checkbox" ng-model="post_published"></td>
+        <td><a href ng-click='addPost()'>Add</a></td>
+      </tr>
+
+    </tbody>
+  </table>
+  <p>
+      This example uses the <a href="https://github.com/tpodom/angularjs-rails-resource">angularjs-rails-resource</a> AngularJS extension.
+  </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<html ng-app="myApp">
+<head>
+  <title>04.01-repeat</title>
+
+  <script src="../lib/angular.js" ></script>
+  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css">
+
+  <script>
+  var myApp = angular.module('myApp',[]);
+
+  myApp.controller('PeopleController', ['$scope', function($scope) {
+    $scope.people = [
+       {name: 'Daniel',  language: 'CoffeScript', twitter:'danielwanja'},
+       {name: 'Lee',     language: 'Ruby', twitter: 'lmarlow'},
+       {name: 'Solomon', language: 'Erlang', twitter: 'rubysolo'},
+       {name: 'Cameron', language: 'Ruby', twitter: 'theaboutbox'}
+    ];
+  }]);
+
+  </script>
+
+</head>
+<body>
+  <div ng-controller="PeopleController"
+       style="width:400px; margin-left:auto; margin-right:auto;">
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Speaks</th>
+        <th>Twitter</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="person in people | orderBy:'name'">
+        <td>{{$index}}</td>
+        <td>{{person.name}}</td>
+        <td>{{person.language}}</td>
+        <td>{{person.twitter}}</td>
+        <td>
+          <img width="50px" ng-src="https://avatars.io/twitter/{{person.twitter}}" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</body>
+</html>

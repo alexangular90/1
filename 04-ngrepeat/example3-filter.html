@@ -1,0 +1,41 @@
+<html ng-app="myApp">
+<head>
+  <title>04.03-filter</title>
+
+  <script src="../lib/angular.js" ></script>
+  <script src="../lib/angular-resource.js" ></script>
+  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css">
+
+  <script src="top_movies.js"></script>
+
+  <script>
+  var myApp = angular.module('myApp',[]);
+
+  myApp.controller('MovieController', ['$scope', function($scope) {
+    $scope.topMovies = topMovies.feed.entry;
+  }]);
+  </script>
+
+</head>
+<body>
+
+  <div ng-controller="MovieController">
+      <h1>Top {{topMovies.length}} Movies!</h1>
+      <input name="search" type="text" ng-model="search" class="search-query" placeholder="Search">
+
+      <div class="container">
+        <div class="row">
+          <div ng-repeat="movie in topMovies | filter:search "
+               class="thumbnail col-xs-3" style="height:350px;overflow:auto;">
+            <img ng-src="{{movie['im:image'][2].label}}">
+            <h3>{{$index+1}} - {{movie.title.label}}</h3>
+            <p>{{movie.category.attributes.label}}</p>
+            <p>{{movie.summary.label}}</p>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+</body>
+</html>

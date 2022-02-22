@@ -1,0 +1,28 @@
+<html ng-app="myApp">
+<head>
+  <title>02.01-controller</title>
+
+  <script src="../lib/angular.js" ></script>
+  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css">
+
+  <script>
+  var myApp = angular.module('myApp',[]);
+
+  myApp.controller('MyController', ['$scope', function($scope) {
+    $scope.yourName = "Person1";
+  }]);
+  </script>
+
+</head>
+<body>
+
+    <div ng-controller="MyController">
+      <label>Name:</label>
+      <input type="text" ng-model="yourName" placeholder="Enter a name here">
+      <hr>
+      <h1>Hello {{yourName}}!</h1>
+      <h1>Hello {{yourName | uppercase}}!</h1>
+    </div>
+
+</body>
+</html>

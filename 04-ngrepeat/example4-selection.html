@@ -1,0 +1,55 @@
+<html ng-app="myApp">
+<head>
+  <title>04.04-selection</title>
+
+  <script src="../lib/angular.js" ></script>
+  <script src="../lib/angular-resource.js" ></script>
+  <link rel="stylesheet" href="../lib/bootstrap/css/bootstrap.css">
+
+  <!-- Load data -->
+  <script src="top_movies.js"></script>
+
+  <script>
+  var myApp = angular.module('myApp',[]);
+
+  myApp.controller('MovieController', ['$scope', function($scope) {
+    $scope.topMovies = topMovies.feed.entry;
+    $scope.selectedMovie = null;
+    $scope.recents = []
+
+    $scope.showMovie = function(movie) {
+      $scope.selectedMovie = movie
+      $scope.recents.unshift(movie)
+    };
+  }]);
+  </script>
+
+</head>
+<body>
+
+  <div ng-controller="MovieController" class="container">
+    <div class="row">
+
+      <div class="col-xs-8">
+        <h1>Top {{topMovies.length}} Movies!</h1>
+        <img  ng-src="{{movie['im:image'][2].label}}"
+              ng-click="showMovie(movie)"
+              ng-repeat="movie in topMovies">
+        <div class="well">
+              <h3>{{selectedMovie.title.label}}</h3>
+              <p>{{selectedMovie.category.attributes.label}}</p>
+              <p>{{selectedMovie.summary.label}}</p>
+        </div>
+      </div>
+
+      <div class="col-xs-4">
+        Recents:
+       <div ng-repeat="movie in recents | limitTo:5 track by $index">
+        <img ng-src="{{movie['im:image'][1].label}}" />
+       </div>
+      </div>
+
+  </div>
+
+</body>
+</html>
